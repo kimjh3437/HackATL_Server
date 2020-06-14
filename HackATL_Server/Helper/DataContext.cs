@@ -17,9 +17,13 @@ namespace HackATL_Server.Helper
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             // connect to sql server database
-            options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase"));
+            options.UseSqlServer(Configuration.GetConnectionString("NewDatabase"));
         }
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Agenda_Item> AgendaItems { get; set; }
+
+        
 
 
     }

@@ -28,5 +28,7 @@
     <Folder Include="Models\Model\" />
     <Folder Include="Helper\" />
     <Folder Include="Models\Model\authentication\" />
+    <Folder Include="Models\Repository\Interfaces\" />
+    <Folder Include="Models\Repository\Services\" />
   </ItemGroup>
 </Project>

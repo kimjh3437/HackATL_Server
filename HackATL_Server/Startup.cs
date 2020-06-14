@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using HackATL_Server.Helper;
 using HackATL_Server.Models.Repository;
+using HackATL_Server.Models.Repository.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +37,7 @@ namespace HackATL_Server
         {
             //if (_env.IsProduction())
             //    services.AddDbContext<DataContext>();
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("WebApiDatabase")));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NewDatabase")));
             services.AddAutoMapper(typeof(Startup));
 
 
@@ -67,6 +68,7 @@ namespace HackATL_Server
             });
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAgendaService, AgendaService>();
 
             //added manually
            

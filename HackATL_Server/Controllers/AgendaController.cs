@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using HackATL_Server.Models.Model;
 using HackATL_Server.Models.Repository;
+using HackATL_Server.Models.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,30 +13,36 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HackATL_Server.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class AgendaController : ControllerBase
     {
         private readonly IAgendaRepository AgendaRepository;
+        private readonly IAgendaService AgendaService;
 
-        public AgendaController(IAgendaRepository agendaRepository)
+        public AgendaController(
+            IAgendaRepository agendaRepository,
+            IAgendaService agendaService)
         {
             AgendaRepository = agendaRepository;
+            AgendaService = agendaService;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<Agenda_Item>> GetAgendaList()
         {
-            return AgendaRepository.GetAll().ToList();
+            return AgendaService.GetAllEvents().ToList();
         }
 
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Agenda_Item> GetAgenda(string id)
         {
-            Agenda_Item agenda = AgendaRepository.Get(id);
+            Agenda_Item agenda = AgendaService.GetEvent(id);
 
             if (agenda == null)
                 return NotFound();
@@ -58,7 +66,7 @@ namespace HackATL_Server.Controllers
         {
             try
             {
-                AgendaRepository.Update(agenda);
+                AgendaService.UpdateEvent(agenda);
             }
             catch (Exception)
             {
@@ -72,7 +80,7 @@ namespace HackATL_Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult DeleteAgenda(string id)
         {
-            Agenda_Item agenda = AgendaRepository.Remove(id);
+            Agenda_Item agenda = AgendaService.DeleteEvent(id);
 
             if (agenda == null)
                 return NotFound();
