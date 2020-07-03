@@ -19,5 +19,16 @@ namespace HackATL_Server.Models.Model.authentication
 
         //[Required]
         public string Role { get; set; }
+
+
+        //new
+        public string Major { get; set; }
+        public string University { get; set; }
+        public string LinkedUsername { get; set; }
+        public string FacebookUsername { get; set; }
+        public string InstagramUsername { get; set; }
+        public string TwitterUsername { get; set; }
+        public string AdditionalInfo { get; set; }
+        public string Status { get; set; }
     }
 }

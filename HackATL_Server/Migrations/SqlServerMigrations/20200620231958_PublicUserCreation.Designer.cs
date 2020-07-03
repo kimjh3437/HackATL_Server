@@ -4,14 +4,16 @@ using HackATL_Server.Helper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HackATL_Server.Migrations.SqlServerMigrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200620231958_PublicUserCreation")]
+    partial class PublicUserCreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,13 +89,10 @@ namespace HackATL_Server.Migrations.SqlServerMigrations
                     b.Property<string>("ChatRoom_participantsRId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserChatList_GroupRId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserNames")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Uid");
@@ -177,25 +176,10 @@ namespace HackATL_Server.Migrations.SqlServerMigrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AdditionalInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FacebookUsername")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("InstagramUsername")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LinkedUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Major")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
@@ -205,15 +189,6 @@ namespace HackATL_Server.Migrations.SqlServerMigrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TwitterUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("University")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
@@ -229,40 +204,13 @@ namespace HackATL_Server.Migrations.SqlServerMigrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AdditionalInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FacebookUsername")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstagramUsername")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LinkedUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Major")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Team")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TwitterUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("University")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
@@ -271,31 +219,6 @@ namespace HackATL_Server.Migrations.SqlServerMigrations
                     b.HasKey("Id");
 
                     b.ToTable("User_Public");
-                });
-
-            modelBuilder.Entity("HackATL_Server.Models.Model.authentication.UserPersonalInfo", b =>
-                {
-                    b.Property<string>("Uid")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FacebookUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstagramUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LinkedUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TwitterUsername")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("University")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Uid");
-
-                    b.ToTable("Users_Personal");
                 });
 
             modelBuilder.Entity("HackATL_Server.Models.Model.Chat_related.UserChatList_Component", b =>

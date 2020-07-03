@@ -9,6 +9,7 @@ using AutoMapper;
 using HackATL_Server.Helper;
 using HackATL_Server.Models.Model;
 using HackATL_Server.Models.Model.authentication;
+using HackATL_Server.Models.Model.Chat_related;
 using HackATL_Server.Models.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -28,6 +29,7 @@ namespace HackATL_Server.Controllers
         private readonly IUserRepository UserRepository;
         private IMapper _mapper;
         private IUserService _userService;
+        
         private readonly AppSettings _appSettings;
         public UserController(
             IUserRepository userRepository,
@@ -50,6 +52,14 @@ namespace HackATL_Server.Controllers
             return _userService.GetAll().ToList();
         }
 
+        [Authorize(Roles = "Admin,User")]
+        [HttpGet("GetUsersPublic")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<IEnumerable<PublicModel>> List_Public()
+        {
+            return _userService.GetAll_Public().ToList();
+        }
+
         [AllowAnonymous]
         [HttpPost("check")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -65,7 +75,8 @@ namespace HackATL_Server.Controllers
             }       
         }
 
-        
+
+
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -91,6 +102,7 @@ namespace HackATL_Server.Controllers
         public ActionResult<User> Register([FromBody]RegisterModel model)
         {
             var user = _mapper.Map<User>(model);
+            
             try
             {
                 // create user

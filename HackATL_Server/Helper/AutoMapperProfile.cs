@@ -12,6 +12,7 @@ namespace HackATL_Server.Helper
             CreateMap<User, UserModel>();
             CreateMap<RegisterModel, User>();
             CreateMap<UpdateModel, User>();
+            CreateMap<User, PublicModel>();
         }
     }
 }

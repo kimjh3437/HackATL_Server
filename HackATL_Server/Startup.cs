@@ -7,6 +7,7 @@ using AutoMapper;
 using HackATL_Server.Helper;
 using HackATL_Server.Models.Repository;
 using HackATL_Server.Models.Repository.Interfaces;
+using HackATL_Server.Models.Repository.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +38,7 @@ namespace HackATL_Server
         {
             //if (_env.IsProduction())
             //    services.AddDbContext<DataContext>();
+            services.AddDbContext<DataContext_Dev>(options => options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NewDatabase")));
             services.AddAutoMapper(typeof(Startup));
 
@@ -74,12 +76,20 @@ namespace HackATL_Server
            
 
 
-            services.AddSingleton<IItemRepository, ItemRepository>();
-            services.AddSingleton<IAgendaRepository, AgendaRepository>();
-            services.AddSingleton<IUserRepository, UserRepository>();
-            
-            services.AddSignalR().AddAzureSignalR();
-            
+            services.AddScoped<IItemRepository, ItemRepository>();
+            services.AddScoped<IAgendaRepository, AgendaRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IChatService, ChatService>();
+
+            //services.AddSignalR().AddAzureSignalR();
+
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.EnableDetailedErrors = true;
+            }).AddAzureSignalR(Configuration.GetSection("Config:AzureSignalRConnectionString").Value);
+
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

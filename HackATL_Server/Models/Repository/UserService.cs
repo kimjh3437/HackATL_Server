@@ -4,9 +4,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using HackATL_Server.Helper;
 using HackATL_Server.Models.Model;
 using HackATL_Server.Models.Model.authentication;
+using HackATL_Server.Models.Model.Chat_related;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,11 +17,13 @@ namespace HackATL_Server.Models.Repository
     public class UserService : IUserService
     {
         private DataContext _context;
-        
+        private IMapper _mapper;
 
-        public UserService(DataContext context)
+
+        public UserService(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
             
         }
 
@@ -47,6 +51,18 @@ namespace HackATL_Server.Models.Repository
             return user;
         }
 
+        //public UserChat_LogList GetChatRoomList(string userId)
+        //{
+        //    var user_specific = _context.User_GroupChatList.SingleOrDefault(x => x.Id == userId);
+        //    return user_specific.ChatList;
+        //}
+
+        
+        public IEnumerable<PublicModel> GetAll_Public()
+        {
+            return _context.User_Public;
+
+        }
         public IEnumerable<User> GetAll()
         {
             return _context.Users;
@@ -59,6 +75,9 @@ namespace HackATL_Server.Models.Repository
 
         public User Create(User user, string password)
         {
+            UserChat_LogList model = new UserChat_LogList();
+           
+            
             // validation
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Password is required");
@@ -70,8 +89,32 @@ namespace HackATL_Server.Models.Repository
             {
                 user.Role = Role.Admin;
             }
-            user.Id = Guid.NewGuid().ToString();
-            user.Role = Role.User;
+            PublicModel model_public = MakePublic(user);
+            var uid = Guid.NewGuid().ToString();
+            model_public.Id = uid;
+            user.Id = uid;
+            if(user.Role == null)
+            {
+                user.Role = Role.User;
+            }
+            // initate chatroom 
+            try
+            {
+                model.Id = uid;
+                List<UserChatList_Group> initiate = new List<UserChatList_Group>();
+                model.ChatList = initiate;
+                _context.User_GroupChatList.Add(model);
+
+
+
+
+            }
+            catch(Exception ex)
+            {
+                
+                
+            }
+            _context.User_Public.Add(model_public);
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
@@ -82,6 +125,28 @@ namespace HackATL_Server.Models.Repository
             _context.SaveChanges();
 
             return user;
+        }
+        PublicModel MakePublic(User user)
+        {
+            PublicModel model = new PublicModel();
+           
+            model = _mapper.Map<PublicModel>(user);
+
+            
+            //{
+
+            //    Id = user.Id,
+            //    FirstName = user.FirstName,
+            //    LastName = user.LastName,
+            //    Username = user.Username,
+            //    Searchable_name = $"{user.FirstName} {user.LastName}",
+            //    Role = user.Role
+
+            //};
+
+
+            return model;
+
         }
         public bool Check(string username)
         {
