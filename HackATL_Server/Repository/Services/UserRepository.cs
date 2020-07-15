@@ -38,6 +38,7 @@ namespace HackATL_Server.Models.Repository
         {
             users[user.Id] = user;
         }
+        
     }
 
     

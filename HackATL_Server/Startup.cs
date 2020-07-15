@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using HackATL_Server.Helper;
+using HackATL_Server.Models.Model;
+using HackATL_Server.Models.MongoDatabase.Settings;
 using HackATL_Server.Models.Repository;
 using HackATL_Server.Models.Repository.Interfaces;
 using HackATL_Server.Models.Repository.Services;
@@ -12,12 +14,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace HackATL_Server
@@ -40,6 +44,8 @@ namespace HackATL_Server
             //    services.AddDbContext<DataContext>();
             services.AddDbContext<DataContext_Dev>(options => options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NewDatabase")));
+
+          
             services.AddAutoMapper(typeof(Startup));
 
 
@@ -73,8 +79,13 @@ namespace HackATL_Server
             services.AddScoped<IAgendaService, AgendaService>();
 
             //added manually
-           
 
+            // requires using Microsoft.Extensions.Options
+            services.Configure<MongoDBSettings>(
+                Configuration.GetSection(nameof(MongoDBSettings)));
+
+            services.AddSingleton<IMongoDBSettings>(sp =>
+                sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IAgendaRepository, AgendaRepository>();

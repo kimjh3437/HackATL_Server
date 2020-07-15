@@ -22,15 +22,26 @@
     </PackageReference>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="FirebaseDatabase.net" Version="4.0.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
+    <PackageReference Include="MongoDB.Bson" Version="2.10.4" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Models\Repository\" />
+    <Folder Include="Repository\" />
     <Folder Include="Models\Model\" />
     <Folder Include="Helper\" />
     <Folder Include="Models\Model\authentication\" />
-    <Folder Include="Models\Repository\Interfaces\" />
-    <Folder Include="Models\Repository\Services\" />
+    <Folder Include="Repository\Services\" />
     <Folder Include="Models\Model\Chat_related\" />
+    <Folder Include="Models\Model\SQLServerDbModel\" />
+    <Folder Include="Models\Model\HttpModel\" />
+    <Folder Include="Models\MongoDatabase\" />
+    <Folder Include="Models\MongoDatabase\Users\" />
+    <Folder Include="Models\Model\MongoDatabase\Chats\" />
+    <Folder Include="Models\MongoDatabase\Reservations\" />
+    <Folder Include="Models\MongoDatabase\Forums\" />
+    <Folder Include="Models\MongoDatabase\Auth\" />
+    <Folder Include="Repository\Services_MongoDB\" />
+    <Folder Include="Models\MongoDatabase\Settings\" />
   </ItemGroup>
 </Project>
