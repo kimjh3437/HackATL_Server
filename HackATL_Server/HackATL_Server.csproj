@@ -43,5 +43,6 @@
     <Folder Include="Models\MongoDatabase\Auth\" />
     <Folder Include="Repository\Services_MongoDB\" />
     <Folder Include="Models\MongoDatabase\Settings\" />
+    <Folder Include="Repository\Interfaces_MongoDB\" />
   </ItemGroup>
 </Project>

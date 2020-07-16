@@ -11,8 +11,7 @@ namespace HackATL_Server.Models.MongoDatabase.Settings
 {
     public class MongoDBSettings : IMongoDBSettings 
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        
         public string User { get; set; }
 
         public string Agenda { get; set; }

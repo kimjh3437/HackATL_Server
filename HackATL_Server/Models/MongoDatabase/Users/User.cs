@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using HackATL_Server.Models.Model.MongoDatabase.Auth;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace HackATL_Server.Models.Model.MongoDatabase.Users
 {
     public class User : IUser
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string uID { get; set; }
 
         public string hackathonID { get; set; }
@@ -24,6 +29,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Users
         public User_Thread Threads { get; set; } // two types: list of threadID of favorite threads and list of personal posts
 
         public bool Status { get; set; } // whether user is online or not
+
+        public AuthUser Auth { get; set; }
 
     
     }
@@ -50,7 +57,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Users
 
         bool Status { get; set; }
 
-        
+        AuthUser Auth { get; set; }
+
     }
 
 }
