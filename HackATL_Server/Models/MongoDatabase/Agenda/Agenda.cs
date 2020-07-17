@@ -9,6 +9,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Agenda
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
+
         public string agendaID { get; set; }
 
         public string Name { get; set; }

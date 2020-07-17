@@ -3,6 +3,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Users
 {
     public class User_Personal
     {
+        public string uID { get; set;  }
+
         public string Firstname { get; set; }
 
         public string Lastname { get; set; }
@@ -18,5 +20,7 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Users
         public string InstagramUsername { get; set; }
 
         public string TwitterUsername { get; set; }
+
+   
     }
 }

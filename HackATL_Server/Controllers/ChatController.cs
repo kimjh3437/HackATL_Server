@@ -4,8 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using HackATL_Server.Helper;
 using HackATL_Server.Models.Model.Chat_related;
+using HackATL_Server.Models.Model.MongoDatabase.Chats;
+using HackATL_Server.Models.Model.MongoDatabase.Users;
+using HackATL_Server.Models.Model_Http.Chat;
 using HackATL_Server.Models.Repository;
 using HackATL_Server.Models.Repository.Interfaces;
+using HackATL_Server.Repository.Interfaces_MongoDB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,13 +24,13 @@ namespace HackATL_Server.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        private IUserService _userService;
-        private IChatService _chatService; 
+        private IUserService_md _userService;
+        private IChatService_md _chatService; 
         private readonly AppSettings _appSettings;
         public ChatController(
-            IUserService userService,
+            IUserService_md userService,
             IOptions<AppSettings> appSettings,
-            IChatService chatService)
+            IChatService_md chatService)
         {
             //_userService = userService;
             //_appSettings = appSettings.Value;
@@ -37,37 +41,82 @@ namespace HackATL_Server.Controllers
 
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpGet("{id}/getchatList")]
-        public ActionResult<UserChat_LogList> GetRoomList(string id)
+        [HttpGet("getroom")]
+        public ActionResult<List<Chatroom>> GetRooms([FromBody]string uID)
         {
-            var user_chatroomList = _chatService.GetChatRoomList(id);
-            return user_chatroomList;
+            List<Chatroom> rooms = new List<Chatroom>();
+            rooms = _chatService.GetChatrooms(uID);
+            if (rooms == null){
+                return BadRequest();
+            }
+            return Ok(rooms);
+            
+
+        }
+
+        
+        
+
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost("addmember")]
+        public ActionResult AddMember([FromBody] AddDelete model)
+        {
+            var status = _chatService.AddMember(model.uID, model.chatID);
+            if (status)
+            {
+                return Ok();
+            }
+            return BadRequest();
+            
+
 
         }
 
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPost("addchat")]
-        public ActionResult<ChatRoom_participants> AddRoom([FromBody]AddChatRoom input)
+        [HttpPost("create")]
+        public ActionResult CreateRoom([FromBody]List<string>members)
         {
-            if(input != null)
-            {
-                var added = _chatService.AddInitiate(input);
-                ChatRoom_participants chatroom = new ChatRoom_participants();
-                chatroom = added;
-                if (chatroom == null)
-                {
-                    return BadRequest();
-                }
-                return Ok(chatroom);
-
-            }
-            else
-            {
-                return BadRequest();
-            }
             
+            List<User_Personal> personals = _chatService.CreateChatroom(members);
+            if (personals != null)
+                return Ok(personals);
+            return BadRequest();
+            
+        }
+
+
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost("getmembers")]
+        public ActionResult GetMembers([FromBody] List<string> members)
+        {
+
+            List<User_Personal> personals = _chatService.CreateChatroom(members);
+            if (personals != null)
+                return Ok(personals);
+            return BadRequest();
+
+        }
+
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpDelete("delete")]
+        public ActionResult DeleteRoom([FromBody]AddDelete model)
+        {
+            var status = _chatService.DeleteChatroom(model.uID, model.chatID);
+            if (status)
+            {
+                return Ok();
+            }
+            return BadRequest();
+
+
         }
     }
 }

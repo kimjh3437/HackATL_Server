@@ -44,5 +44,12 @@
     <Folder Include="Repository\Services_MongoDB\" />
     <Folder Include="Models\MongoDatabase\Settings\" />
     <Folder Include="Repository\Interfaces_MongoDB\" />
+    <Folder Include="Models\Model_Http\" />
+    <Folder Include="Models\Model_Http\Auth\" />
+    <Folder Include="Models\Model_Http\User\" />
+    <Folder Include="Models\Model_Http\Agenda\" />
+    <Folder Include="Models\Model_Http\Reservation\" />
+    <Folder Include="Models\Model_Http\Chat\" />
+    <Folder Include="Models\Model_Http\Forum\" />
   </ItemGroup>
 </Project>

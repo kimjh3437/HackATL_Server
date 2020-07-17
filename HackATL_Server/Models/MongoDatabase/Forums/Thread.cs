@@ -9,6 +9,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Forums
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
+
         public string threadID { get; set; }
 
         public bool Favorite { get; set; } //always null 

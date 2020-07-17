@@ -7,8 +7,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Auth
 
         public string Username { get; set; }
 
-        public Byte[] PasswordHash { get; set; }
+        public byte[] PasswordHash { get; set; }
 
-        public Byte[] PasswordSalt { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }

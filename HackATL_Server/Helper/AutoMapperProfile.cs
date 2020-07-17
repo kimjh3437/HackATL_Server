@@ -2,6 +2,8 @@
 using AutoMapper;
 using HackATL_Server.Models.Model;
 using HackATL_Server.Models.Model.authentication;
+using HackATL_Server.Models.Model.MongoDatabase.Users;
+using User = HackATL_Server.Models.Model.User;
 
 namespace HackATL_Server.Helper
 {
@@ -13,6 +15,9 @@ namespace HackATL_Server.Helper
             CreateMap<RegisterModel, User>();
             CreateMap<UpdateModel, User>();
             CreateMap<User, PublicModel>();
-        }
+
+
+            CreateMap<RegisterModel, User_Personal>(); //User_MongoDB 
+        } 
     }
 }

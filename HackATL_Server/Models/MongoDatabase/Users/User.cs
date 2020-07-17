@@ -6,10 +6,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace HackATL_Server.Models.Model.MongoDatabase.Users
 {
-    public class User : IUser
+    public class User 
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
+
         public string uID { get; set; }
 
         public string hackathonID { get; set; }
@@ -26,39 +28,20 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Users
 
         public List<string> Chatrooms { get; set; } // list of chatID the user is involved in
 
+        public List<string> Agendas { get; set; } // list of agendaID in MyAgenda 
+
         public User_Thread Threads { get; set; } // two types: list of threadID of favorite threads and list of personal posts
 
         public bool Status { get; set; } // whether user is online or not
 
         public AuthUser Auth { get; set; }
 
+        public string Token { get; set; }
+
+        public string Role { get; set; }
+
     
     }
 
-    public interface IUser
-    {
-        string uID { get; set; }
-
-        string hackathonID { get; set; }
-
-        User_Personal Personal { get; set; }
-
-        string Team { get; set; }
-
-        List<string> Connections { get; set; }
-
-        string Pitch { get; set; }
-
-        List<string> Reservations { get; set; }
-
-        List<string> Chatrooms { get; set; }
-
-        User_Thread Threads { get; set; }
-
-        bool Status { get; set; }
-
-        AuthUser Auth { get; set; }
-
-    }
 
 }

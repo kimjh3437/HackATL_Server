@@ -9,6 +9,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Chats
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
+
         public string chatID { get; set; }
 
         public List<string> Participants { get; set; } // list of uid of users in chatroom 

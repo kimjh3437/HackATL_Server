@@ -23,6 +23,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using HackATL_Server.Models.Repository.Services_MongoDB;
+using UserService = HackATL_Server.Models.Repository.UserService;
+using HackATL_Server.Repository.Interfaces_MongoDB;
+using HackATL_Server.Repository.Services_MongoDB;
 
 namespace HackATL_Server
 {
@@ -42,8 +46,8 @@ namespace HackATL_Server
         {
             //if (_env.IsProduction())
             //    services.AddDbContext<DataContext>();
-            services.AddDbContext<DataContext_Dev>(options => options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NewDatabase")));
+            //services.AddDbContext<DataContext_Dev>(options => options.UseSqlServer(Configuration.GetConnectionString("DevDatabase")));
+            //services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NewDatabase")));
 
           
             services.AddAutoMapper(typeof(Startup));
@@ -74,6 +78,10 @@ namespace HackATL_Server
                     ValidateAudience = false
                 };
             });
+            //mongo
+            services.AddSingleton<IUserService_md, UserService_md>();
+            services.AddSingleton<IChatService_md, ChatService_md>();
+
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAgendaService, AgendaService>();
@@ -82,10 +90,10 @@ namespace HackATL_Server
 
             // requires using Microsoft.Extensions.Options
             services.Configure<MongoDBSettings>(
-                Configuration.GetSection(nameof(MongoDBSettings)));
+                Configuration.GetSection("MongoDBSettings"));
 
-            services.AddSingleton<IMongoDBSettings>(sp =>
-                sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
+            //services.AddScoped<IMongoDBSettings>(sp =>
+            //    sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
             services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IAgendaRepository, AgendaRepository>();

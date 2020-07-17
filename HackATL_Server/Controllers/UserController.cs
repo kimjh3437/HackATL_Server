@@ -7,10 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using HackATL_Server.Helper;
-using HackATL_Server.Models.Model;
+
 using HackATL_Server.Models.Model.authentication;
 using HackATL_Server.Models.Model.Chat_related;
+using HackATL_Server.Models.Model.MongoDatabase.Users;
+using HackATL_Server.Models.Model_Http.Auth;
+using HackATL_Server.Models.Model_Http.User;
 using HackATL_Server.Models.Repository;
+using HackATL_Server.Repository.Interfaces_MongoDB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,12 +32,12 @@ namespace HackATL_Server.Controllers
     {
         private readonly IUserRepository UserRepository;
         private IMapper _mapper;
-        private IUserService _userService;
+        private IUserService_md _userService;
         
         private readonly AppSettings _appSettings;
         public UserController(
             IUserRepository userRepository,
-            IUserService userService,
+            IUserService_md userService,
             IMapper mapper,
             IOptions<AppSettings> appSettings
 
@@ -44,7 +48,7 @@ namespace HackATL_Server.Controllers
             _appSettings = appSettings.Value;
             UserRepository = userRepository;
         }
-        [Authorize(Roles = Role.Admin)]
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<User>> List()
@@ -52,10 +56,10 @@ namespace HackATL_Server.Controllers
             return _userService.GetAll().ToList();
         }
 
-        [Authorize(Roles = "Admin,User")]
+        [Authorize]
         [HttpGet("GetUsersPublic")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<PublicModel>> List_Public()
+        public ActionResult<IEnumerable<User_Personal>> List_Public()
         {
             return _userService.GetAll_Public().ToList();
         }
@@ -77,15 +81,15 @@ namespace HackATL_Server.Controllers
 
 
 
-
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<UserModel> GetUser(string id)
+        public ActionResult<User> GetUser(string id)
         {
-            var user = _userService.GetById(id);
-            var model = _mapper.Map<UserModel>(user);
-            return model;
+            var user = _userService.GetUser(id);
+            //var model = _mapper.Map<UserModel>(user);
+            return user;
 
             //User user = UserRepository.Get(id);
 
@@ -99,7 +103,7 @@ namespace HackATL_Server.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<User> Register([FromBody]RegisterModel model)
+        public ActionResult<User> Register([FromBody]User_Register model)
         {
             var user = _mapper.Map<User>(model);
             
@@ -107,9 +111,8 @@ namespace HackATL_Server.Controllers
             {
                 // create user
                 
-                var output  = _userService.Create(user, model.Password);
-                UserRepository.Add(user);
-                return Ok();
+                var output  = _userService.Register(model); 
+                return Ok(output);
             }
             catch (AppException ex)
             {
@@ -125,7 +128,7 @@ namespace HackATL_Server.Controllers
         [HttpPost("authenticate")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<UserOutput> Authenticate([FromBody]AuthenticateModel model)
+        public ActionResult<User> Authenticate([FromBody]AuthenticateModel model)
         {
             var user = _userService.Authenticate(model.Username, model.Password);
 
@@ -139,7 +142,7 @@ namespace HackATL_Server.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Auth.Username.ToString()),
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
@@ -163,17 +166,18 @@ namespace HackATL_Server.Controllers
             //var token = tokenHandler.CreateToken(tokenDescriptor);
             //var tokenString = tokenHandler.WriteToken(token);
             //var tokenString = "";
-            UserOutput output = new UserOutput
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Role = user.Role,
-                Token = tokenString
+            //UserOutput output = new UserOutput
+            //{
+            //    Id = user.Id,
+            //    Username = user.Username,
+            //    FirstName = user.FirstName,
+            //    LastName = user.LastName,
+            //    Role = user.Role,
+            //    Token = tokenString
 
-            };
-            return Ok(output);
+            //};
+            user.Token = tokenString; 
+            return Ok(user);
             // return basic user info and authentication token
             //return Ok(new
             //{
@@ -186,15 +190,16 @@ namespace HackATL_Server.Controllers
             //});
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update(string id, [FromBody]UpdateModel model)
+        public IActionResult Update(string id, [FromBody]User_Update model)
         {
             // map model to entity and set id
-            var user = _mapper.Map<User>(model);
-            user.Id = id;
-            var temp = _userService.Authenticate(user.Username, model.Password);
+            //var user = _mapper.Map<User>(model);
+            //user.Id = id;
+            var temp = _userService.Authenticate(model.Username, model.Password);
             if(temp == null)
             {
                 return BadRequest();
@@ -203,7 +208,7 @@ namespace HackATL_Server.Controllers
             try
             {
                 // update user 
-                _userService.Update(user, model.Password);
+                _userService.UpdateUser(model.uID, model.Personal);
                 return NoContent();
             }
             catch (AppException ex)

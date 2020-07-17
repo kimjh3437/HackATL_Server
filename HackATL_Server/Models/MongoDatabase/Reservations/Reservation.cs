@@ -8,6 +8,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Reservations
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
+
         public string reservationID { get; set; } // key reservationID 
 
         public string roomID { get; set; } // roomID associated with this reservation 
