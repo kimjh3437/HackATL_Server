@@ -7,9 +7,9 @@ using AutoMapper;
 using HackATL_Server.Helper;
 using HackATL_Server.Models.Model;
 using HackATL_Server.Models.MongoDatabase.Settings;
-using HackATL_Server.Models.Repository;
-using HackATL_Server.Models.Repository.Interfaces;
-using HackATL_Server.Models.Repository.Services;
+using HackATL_Server.Repos.Interface;
+using HackATL_Server.Repos.Service;
+using HackATL_Server.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,10 +23,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using HackATL_Server.Models.Repository.Services_MongoDB;
-using UserService = HackATL_Server.Models.Repository.UserService;
-using HackATL_Server.Repository.Interfaces_MongoDB;
-using HackATL_Server.Repository.Services_MongoDB;
+
+
 
 namespace HackATL_Server
 {
@@ -54,6 +52,9 @@ namespace HackATL_Server
 
 
             services.AddControllers();
+
+            var notificationSettings = Configuration.GetSection("NotificationHubSettings");
+            services.Configure<NotificationHubSettings>(notificationSettings);
             
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -78,15 +79,21 @@ namespace HackATL_Server
                     ValidateAudience = false
                 };
             });
-            //mongo
-            services.AddSingleton<IUserService_md, UserService_md>();
-            services.AddSingleton<IChatService_md, ChatService_md>();
 
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAgendaService, AgendaService>();
 
-            //added manually
+            //----------------------------------------------
+
+            //Below are for service injection
+
+
+            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IChatService, ChatService>();
+            services.AddSingleton<IAgendaService, AgendaService>();
+
+
+
+            //----------------------------------------------
 
             // requires using Microsoft.Extensions.Options
             services.Configure<MongoDBSettings>(
@@ -95,11 +102,7 @@ namespace HackATL_Server
             //services.AddScoped<IMongoDBSettings>(sp =>
             //    sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
-            services.AddScoped<IItemRepository, ItemRepository>();
-            services.AddScoped<IAgendaRepository, AgendaRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IChatService, ChatService>();
-
+       
             //services.AddSignalR().AddAzureSignalR();
 
             services.AddSignalR(hubOptions =>

@@ -24,26 +24,17 @@
     <PackageReference Include="FirebaseDatabase.net" Version="4.0.4" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
     <PackageReference Include="MongoDB.Bson" Version="2.10.4" />
+    <PackageReference Include="Microsoft.Azure.NotificationHubs" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="Repository\" />
-    <Folder Include="Models\Model\" />
     <Folder Include="Helper\" />
-    <Folder Include="Models\Model\authentication\" />
-    <Folder Include="Repository\Services\" />
-    <Folder Include="Models\Model\Chat_related\" />
-    <Folder Include="Models\Model\SQLServerDbModel\" />
-    <Folder Include="Models\Model\HttpModel\" />
-    <Folder Include="Models\MongoDatabase\" />
-    <Folder Include="Models\MongoDatabase\Users\" />
-    <Folder Include="Models\Model\MongoDatabase\Chats\" />
-    <Folder Include="Models\MongoDatabase\Reservations\" />
-    <Folder Include="Models\MongoDatabase\Forums\" />
-    <Folder Include="Models\MongoDatabase\Auth\" />
-    <Folder Include="Repository\Services_MongoDB\" />
-    <Folder Include="Models\MongoDatabase\Settings\" />
-    <Folder Include="Repository\Interfaces_MongoDB\" />
+    <Folder Include="Models\Model_MongoDB\" />
+    <Folder Include="Models\Model_MongoDB\Users\" />
+    <Folder Include="Models\Model_MongoDB\Reservations\" />
+    <Folder Include="Models\Model_MongoDB\Forums\" />
+    <Folder Include="Models\Model_MongoDB\Auth\" />
+    <Folder Include="Models\Model_MongoDB\Settings\" />
     <Folder Include="Models\Model_Http\" />
     <Folder Include="Models\Model_Http\Auth\" />
     <Folder Include="Models\Model_Http\User\" />
@@ -51,5 +42,12 @@
     <Folder Include="Models\Model_Http\Reservation\" />
     <Folder Include="Models\Model_Http\Chat\" />
     <Folder Include="Models\Model_Http\Forum\" />
+    <Folder Include="Repos\" />
+    <Folder Include="Repos\Service\" />
+    <Folder Include="Repos\Interface\" />
+    <Folder Include="Settings\" />
+    <Folder Include="Models\Model_General\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="NotificationHub\" />
   </ItemGroup>
 </Project>
