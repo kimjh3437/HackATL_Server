@@ -6,13 +6,15 @@ namespace HackATL_Server.Repos.Interface
 {
     public interface IAuthService
     {
-        Boolean UpdatePersonal(User_Personal Update);
+        //Boolean UpdatePersonal(User_Personal Update);
 
-        Boolean DeleteUser(string uID);
+        
 
         User Register(User_Register register);
 
         User Authenticate(User_Authenticate authenticate);
+
+        Boolean NameCheck(string username);
 
 
 

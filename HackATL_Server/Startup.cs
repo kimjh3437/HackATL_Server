@@ -90,6 +90,7 @@ namespace HackATL_Server
             services.AddSingleton<IAuthService, AuthService>();
             services.AddSingleton<IChatService, ChatService>();
             services.AddSingleton<IAgendaService, AgendaService>();
+            services.AddSingleton<IThreadService, ThreadService>();
 
 
 

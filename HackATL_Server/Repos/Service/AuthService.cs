@@ -29,25 +29,15 @@ namespace HackATL_Server.Repos.Service
            _users = database.GetCollection<User>(settings.Value.User);
             _auths = database.GetCollection<AuthUser>(settings.Value.AuthUser); 
         }
-        public Boolean UpdatePersonal(User_Personal Update)
+        public Boolean NameCheck(string username)
         {
-            var filter = Builders<User>.Filter.Eq(x => x.uID, Update.uID);
-            var update = Builders<User>.Update.Set(x => x.Personal, Update);
-            var status = _users.UpdateOne(filter, update);
-            if (status == null)
-                return false;
-            return true; 
-
+            AuthUser user = new AuthUser();
+            user = _auths.Find<AuthUser>(x => x.Username == username).FirstOrDefault();
+            if (user == null)
+                return true;
+            return false;
         }
-
-        
-
-        public Boolean DeleteUser(string uID)
-        {
-            var filter = Builders<User>.Filter.Eq(x => x.uID, uID);
-            _users.DeleteOne(filter);
-            return true; 
-        }
+    
 
         public User Register(User_Register register)
         {

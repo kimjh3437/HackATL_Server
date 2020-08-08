@@ -7,10 +7,11 @@ using HackATL_Server.Models.MongoDatabase.Settings;
 using HackATL_Server.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using HackATL_Server.Repos.Interface;
 
 namespace HackATL_Server.Repos.Service
 {
-    public class ThreadService
+    public class ThreadService : IThreadService
     {
         IMongoCollection<Thread> _threads;
         IOptions<MongoDBSettings> _settings;

@@ -13,6 +13,8 @@ namespace HackATL_Server.Models.Model.MongoDatabase.Users
 
         public string Major { get; set; }
 
+        public string University { get; set; }
+
         public string LinkedInUsername { get; set; }
 
         public string FacebookUsername { get; set; }

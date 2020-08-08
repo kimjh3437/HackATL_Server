@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using HackATL_Server.Models.Model.MongoDatabase.Chats;
 using HackATL_Server.Models.Model_Http.Chat;
 
@@ -16,5 +17,7 @@ namespace HackATL_Server.Repos.Interface
         List<Chat_MemberInfo> GetMembersInfo_All(List<string> chatroomIDs);
 
         Boolean LeaveChat(Chat_Leave leave);
+
+        Task<Chat_MemberInfo> AddMembers(Chat_AddMembers add);
     }
 }

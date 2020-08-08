@@ -19,6 +19,23 @@ namespace HackATL_Server.Repos.Service
             var database = client.GetDatabase(Hackathon.Emory_HackATL);
             _users = database.GetCollection<User>(settings.Value.User);
         }
+        public Boolean UpdatePersonal(User_Personal Update)
+        {
+            var filter = Builders<User>.Filter.Eq(x => x.uID, Update.uID);
+            var update = Builders<User>.Update.Set(x => x.Personal, Update);
+            var status = _users.UpdateOne(filter, update);
+            if (status == null)
+                return false;
+            return true;
+
+        }
+
+        public Boolean DeleteUser(string uID)
+        {
+            var filter = Builders<User>.Filter.Eq(x => x.uID, uID);
+            _users.DeleteOne(filter);
+            return true;
+        }
 
         public Boolean ConnectionRequest(User_ConnectionRequest connection)
         {
